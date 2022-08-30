@@ -1,20 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <?php include "_partials/headConfig.html";?>
     <title>Statistics</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
 </head>
 <body>
 
-<?php
-      include "_partials/header.html";
-    ?>
+<?php include "_partials/header.html"; ?>
 
 <div class="content">
     <div class="container mt-4">
@@ -49,12 +41,10 @@
                         <th scope="col">actions</th>
                     </tr>
                     </thead>
-                    <tbody class="swarm-table-body">
+                    <tbody id="swarm-table-body">
                     </tbody>
                 </table>
-
-
-                <span class="btn btn-outline-success">Add</span>
+                <span class="btn btn-outline-success" id="swarm-add" data-bs-toggle="modal" data-bs-target="#swarmAddModal">Add</span>
             </div>
         </div>
 
@@ -68,11 +58,12 @@
         <!--#################################-->
         <!--MODALS -->
         <!--#################################-->
-        <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!--settings modal-->
+        <div class="modal fade" id="settingsModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Update settings</h5>
+                        <h5 class="modal-title">Update settings</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -87,7 +78,7 @@
                             </div>
                         </form>
                         <div class="alert alert-danger" role="alert">
-                            This setting requires a reboot to take affect
+                            This setting requires a reboot to take effect
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -98,11 +89,12 @@
             </div>
         </div>
 
-        <div class="modal fade" id="rebootModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!--reboot modal-->
+        <div class="modal fade" id="rebootModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                        <h5 class="modal-title">Are you sure?</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -113,6 +105,58 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-danger" id="reboot-submit">Reboot</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--swarm add modal-->
+        <div class="modal fade" id="swarmAddModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add participant</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="participant-add-name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="participant-add-name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="participant-add-url" class="col-form-label">URL:</label>
+                                <input type="text" class="form-control" id="participant-add-url">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="participant-submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--participantRemoveModal-->
+        <div class="modal fade" id="participantRemoveModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Are you sure?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            The participant will be removed permanently from the swarm.
+                            <br>
+                            Name: <b id="participant-remove-name"></b>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <span id="participant-remove-id" class="d-none"></span>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="participant-remove-submit">Remove</button>
                     </div>
                 </div>
             </div>
@@ -152,24 +196,64 @@
                 });
             }
 
+            function loadSwarmTable(settings) {
+
+                $tableBody = document.getElementById('swarm-table-body');
+                $tableBody.innerHTML = '';
+                settings.forEach((x, i) => {
+                    const $tr = document.createElement('tr');
+
+                    const $name = document.createElement('td');
+                    $name.textContent = x['name'];
+
+                    const $url = document.createElement('td');
+                    $url.textContent = x['url'];
+
+                    const $actions = document.createElement('td');
+                    const $remove = document.createElement('span');
+
+                    $remove.innerHTML = 'remove';
+                    $remove.classList.add('btn', 'btn-outline-danger');
+                    $remove.dataset.bsToggle="modal";
+                    $remove.dataset.bsTarget="#participantRemoveModal";
+                    $remove.dataset.bsId=x['id'];
+                    $remove.dataset.bsName=x['name'];
+                    $actions.appendChild($remove);
+
+                    $tr.appendChild($name);
+                    $tr.appendChild($url);
+                    $tr.appendChild($actions);
+
+                    $tableBody.appendChild($tr);
+                });
+            }
+
             function updateSettings() {
-                fetch('/api/readSettings.php')
+                fetch('/api/getSettings.php')
                     .then(response => response.json())
                     .then(data => {
                         loadSettingsTable(data)
                     });
             }
 
+            function updateSwarm() {
+                fetch('/api/getParticipants.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        loadSwarmTable(data)
+                    });
+            }
+
+            //setting submit
             const settingsModal = document.getElementById('settingsModal')
             const settingsKeyInput = settingsModal.querySelector('#settings-key');
             const settingsValueInput = settingsModal.querySelector('#settings-value');
-
-
+            //
             settingsModal.addEventListener('show.bs.modal', function (event) {
                 settingsKeyInput.value = event.relatedTarget.dataset.bsKey;
                 settingsValueInput.value = event.relatedTarget.dataset.bsValue;
             });
-
+            //
             const settingsSubmit = document.getElementById('settings-submit');
             settingsSubmit.addEventListener('click', function (e) {
                 fetch('/api/updateSetting.php?key=' + settingsKeyInput.value + '&value=' + settingsValueInput.value)
@@ -180,11 +264,51 @@
                     });
             });
 
+            // reboot
             document.getElementById('reboot-submit').addEventListener('click', function (e) {
                 fetch('/api/reboot.php', {});
             });
 
+            // participant add
+            const swarmAddModal = document.getElementById('swarmAddModal')
+            const participantSubmit = document.getElementById('participant-submit');
+            //
+            swarmAddModal.addEventListener('show.bs.modal', function (event) {
+                document.getElementById('participant-add-name').value = '';
+                document.getElementById('participant-add-url').value = '';
+            });
+            //
+            participantSubmit.addEventListener('click', function (e) {
+                fetch('/api/addParticipant.php?name=' + swarmAddModal.querySelector('#participant-add-name').value + '&url=' + swarmAddModal.querySelector('#participant-add-url').value)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateSwarm();
+                        bootstrap.Modal.getInstance(swarmAddModal).hide();
+                    });
+            });
+
+            // remove participant
+            const participantRemoveModal = document.getElementById('participantRemoveModal');
+            const participantRemoveSubmit = document.getElementById('participant-remove-submit');
+            //
+            console.log('participantRemoveModal', participantRemoveModal);
+            participantRemoveModal.addEventListener('show.bs.modal', function (event) {
+                console.log( event.relatedTarget, event.relatedTarget.dataset.bsName);
+                document.getElementById('participant-remove-name').innerHTML = event.relatedTarget.dataset.bsName;
+                document.getElementById('participant-remove-id').innerHTML = event.relatedTarget.dataset.bsId;
+            });
+            //
+            participantRemoveSubmit.addEventListener('click', function (e) {
+                fetch('/api/removeParticipant.php?id=' + participantRemoveModal.querySelector('#participant-remove-id').innerHTML)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateSwarm();
+                        bootstrap.Modal.getInstance(participantRemoveModal).hide();
+                    });
+            });
+
             updateSettings();
+            updateSwarm();
         </script>
     </div>
 </div>
