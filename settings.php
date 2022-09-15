@@ -51,6 +51,7 @@
         <div class="row my-4">
             <h2>Actions</h2>
             <div class="col-12">
+                <span class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updateModal">Check for updates</span>
                 <span class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rebootModal">Reboot</span>
             </div>
         </div>

@@ -79,7 +79,7 @@
         urlParam += '&to=' + formatDate(endDate) + ' 23:59:59';
         urlParam += '&maxSamples=5000';
 
-        fetch('/api/readSampleData.php?' + urlParam)
+        fetch('/api/getSampleData.php?' + urlParam)
             .then(response => response.json())
             .then(data => {
                 loadGraph(data)
@@ -117,9 +117,9 @@
                 text: 'drawing ' + dataPointsCount + ' points'
             },
 
-            subtitle: {
-                text: 'Using the Boost module'
-            },
+            // subtitle: {
+            //     text: 'Using the Boost module'
+            // },
 
             accessibility: {
                 screenReaderSection: {
