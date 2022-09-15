@@ -25,10 +25,15 @@ A web page that displays a variety of graphs and data insights based on the API 
 
 ## Set up the repo
 You will need a raspberry pi with apache, php, mysql, python and git installed on it.
-1. Pull the repo anywhere you want, ex your home dir
-2. remove the _ from `scripts/database_.py` and `htdocs/api/config/Database_.php` and fill out your DB credentials
-3. create a synlink for the web project and python scripts
+- Pull the repo anywhere you want, ex your home dir 
+- remove the _ from `scripts/database_.py` and `htdocs/api/config/Database_.php` and fill out your DB credentials 
+- create a synlink for the web project and python scripts
 ```
 ln -s ~/utility-insights/htdocs /var/www/htdocs
 ln -s ~/utility-insights/scripts /home/pi/scripts
+```
+- setup the cron tab
+```
+@reboot sleep 5 && python3 /home/pi/scripts/read_electricity_meter.py > /home/pi/scripts/log/read_electricity_meter.log 2>&1
+@reboot sleep 5 && python3 /home/pi/scripts/read_green_energy_meter.py > /home/pi/scripts/log/read_green_energy_meter.log 2>&1
 ```
