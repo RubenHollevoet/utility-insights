@@ -115,14 +115,16 @@ if($_GET['update'] ?? null === 'true') {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <span class="text-end text-muted d-block">current version: v<?php echo exec('git -C /home/pi/utility-insights/htdocs describe --tags'); ?></span>
+                        <span class="text-end text-muted d-block">current version: v<?php echo exec('git -C /home/pi/utility-insights describe --tags --abbrev=0'); ?></span>
                         <div class="mt-5 d-flex flex-column">
                             <?php
-                            exec('git -C /home/pi/utility-insights/htdocs pull', $versions, $retval);
-                            exec('git -C /home/pi/utility-insights/htdocs tag -l', $versions, $retval);
+                            exec('git -C /home/pi/utility-insights pull', $versions, $retval);
+                            exec('git -C /home/pi/utility-insights tag -l', $versions, $retval);
 
                             $lastTag = end($versions);
-                            $currentTag = exec('git -C /home/pi/utility-insights/htdocs describe --tags');
+                            $currentTag = exec('git -C /home/pi/utility-insights describe --tags --abbrev=0');
+
+                            var_dump($lastTag, $currentTag);
 
                             if($lastTag !== $currentTag) {
                                 echo '<a href="?update=true" class="my-1 btn btn-outline-primary">install v'.$lastTag.'</a>';
