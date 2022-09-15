@@ -29,8 +29,8 @@ You will need a raspberry pi with apache, php, mysql, python and git installed o
 - remove the _ from `scripts/database_.py` and `htdocs/api/config/Database_.php` and fill out your DB credentials 
 - create a synlink for the web project and python scripts
 ```
-ln -s ~/utility-insights/htdocs /var/www/htdocs
-ln -s ~/utility-insights/scripts /home/pi/scripts
+ln -s /home/pi/utility-insights/htdocs /var/www/htdocs
+ln -s /home/pi/utility-insights/scripts /home/pi/scripts
 ```
 - setup the cron tab
 ```

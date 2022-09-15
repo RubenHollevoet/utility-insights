@@ -18,6 +18,4 @@ $stmt->bindParam(':key', $_GET['key'], PDO::PARAM_STR);
 $stmt->bindParam(':value', $_GET['value'], PDO::PARAM_STR);
 $stmt->execute();
 
-header("Content-Type: application/json; charset=UTF-8");
-http_response_code(201);
-echo json_encode(['status' => 'ok']);
+header("Location: https://example.com/myOtherPage.php");

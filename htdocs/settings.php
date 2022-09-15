@@ -8,6 +8,15 @@
 
 <?php include "_partials/header.html"; ?>
 
+<?php
+if($_GET['update'] ?? null === 'true') {
+    exec('git -C /home/pi/utility-insights/htdocs up', $versions, $retval);
+
+
+}
+
+?>
+
 <div class="content">
     <div class="container mt-4">
         <h1>Settings</h1>
@@ -51,7 +60,7 @@
         <div class="row my-4">
             <h2>Actions</h2>
             <div class="col-12">
-                <span class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updateModal">Check for updates</span>
+                <span class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#updateVersionModal">Check for updates</span>
                 <span class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rebootModal">Reboot</span>
             </div>
         </div>
@@ -85,6 +94,41 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" id="settings-submit">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--update modal-->
+        <div class="modal fade" id="updateVersionModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Install updates</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="text-end text-muted d-block">current version: v<?php echo exec('git -C /home/pi/utility-insights/htdocs describe --tags'); ?></span>
+                        <div class="mt-5 d-flex flex-column">
+                            <?php
+                            exec('git -C /home/pi/utility-insights/htdocs pull');
+                            exec('git -C /home/pi/utility-insights/htdocs tag -l', $versions, $retval);
+
+                            $lastTag = end($versions);
+                            $currentTag = exec('git -C /home/pi/utility-insights/htdocs describe --tags');
+
+                            if($lastTag !== $currentTag) {
+                                echo '<a href="?update=true" class="my-1 btn btn-outline-primary">install '.$lastTag.'</a>';
+                            }
+                            else {
+                                echo '<button class="my-1 btn btn-outline-primary" disabled>update</button>';
+                                echo '<span class="my-1 d-block text-center text-muted">You already are on the latest version</span>';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
