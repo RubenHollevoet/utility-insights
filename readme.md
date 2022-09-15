@@ -26,9 +26,9 @@ A web page that displays a variety of graphs and data insights based on the API 
 ## Set up the repo
 You will need a raspberry pi with apache, php, mysql, python and git installed on it.
 1. Pull the repo anywhere you want, ex your home dir
-2. create a synlink for the web project and python scripts
+2. remove the _ from `scripts/database_.py` and `htdocs/api/config/Database_.php` and fill out your DB credentials
+3. create a synlink for the web project and python scripts
 ```
 ln -s ~/utility-insights/htdocs /var/www/htdocs
 ln -s ~/utility-insights/scripts /home/pi/scripts
 ```
-3. 
