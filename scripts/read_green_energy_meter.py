@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 import time
 import mysql.connector
 
+import database
+
 #GPIO setup
 BUTTON_PIN = 16
 GPIO.setmode(GPIO.BCM)
@@ -14,14 +16,6 @@ pulseCount = 0
 lastPulse = 0
 lastInterval = 0
 
-#db setup
-utilityDb = mysql.connector.connect(
-        user="app",
-        password="t09x4f66",
-        host="127.0.0.1",
-        port="3306",
-        database="utility_stats"
-    )
 cursor = utilityDb.cursor()
 
 #load settings from DB

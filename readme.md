@@ -28,7 +28,7 @@ You will need a raspberry pi with apache, php, mysql, python and git installed o
 1. Pull the repo anywhere you want, ex your home dir
 2. create a synlink for the web project and python scripts
 ```
-ln -s ~/utility-insights/htdocs /var/www/html/htdocs
-ln -s ~/utility-insights/
+ln -s ~/utility-insights/htdocs /var/www/htdocs
+ln -s ~/utility-insights/scripts /home/pi/scripts
 ```
 3. 

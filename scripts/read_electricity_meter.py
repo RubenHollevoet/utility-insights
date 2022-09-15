@@ -4,29 +4,10 @@ import random
 import time
 
 import p1_port
+import database
 
 #global vars
 data_push_interval = 10
-
-utilityDb = mysql.connector.connect(
-        user="app",
-        password="t09x4f66",
-        host="127.0.0.1",
-        port="3306",
-        database="utility_stats"
-    )
-
-cursor = utilityDb.cursor()
-
-
-#db setup
-utilityDb = mysql.connector.connect(
-        user="app",
-        password="t09x4f66",
-        host="127.0.0.1",
-        port="3306",
-        database="utility_stats"
-    )
 cursor = utilityDb.cursor()
 
 #load settings from DB
@@ -39,7 +20,6 @@ print("start collection P1 port data from electricity meter. Registering power e
 #start collecting data
 def printit():
     threading.Timer(int(data_push_interval), printit).start()
-
 
     p1 = p1_port.readSerialData()
 
