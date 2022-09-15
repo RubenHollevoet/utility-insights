@@ -10,8 +10,15 @@
 
 <?php
 if($_GET['update'] ?? null === 'true') {
-    exec('git -C /home/pi/utility-insights/htdocs up', $versions, $retval);
+    exec('git -C /home/pi/utility-insights reset --hard', $versions, $retval);
 
+    var_dump($versions);
+    var_dump($retval);
+
+    exec('git -C /home/pi/utility-insights pull', $versions, $retval);
+
+    var_dump($versions);
+    var_dump($retval);
 
 }
 
@@ -111,14 +118,14 @@ if($_GET['update'] ?? null === 'true') {
                         <span class="text-end text-muted d-block">current version: v<?php echo exec('git -C /home/pi/utility-insights/htdocs describe --tags'); ?></span>
                         <div class="mt-5 d-flex flex-column">
                             <?php
-                            exec('git -C /home/pi/utility-insights/htdocs pull');
+                            exec('git -C /home/pi/utility-insights/htdocs pull', $versions, $retval);
                             exec('git -C /home/pi/utility-insights/htdocs tag -l', $versions, $retval);
 
                             $lastTag = end($versions);
                             $currentTag = exec('git -C /home/pi/utility-insights/htdocs describe --tags');
 
                             if($lastTag !== $currentTag) {
-                                echo '<a href="?update=true" class="my-1 btn btn-outline-primary">install '.$lastTag.'</a>';
+                                echo '<a href="?update=true" class="my-1 btn btn-outline-primary">install v'.$lastTag.'</a>';
                             }
                             else {
                                 echo '<button class="my-1 btn btn-outline-primary" disabled>update</button>';
