@@ -22,3 +22,13 @@ A few plain PHP scripts that read data from the database, process them and retur
 
 ### Web app
 A web page that displays a variety of graphs and data insights based on the API calls
+
+## Set up the repo
+You will need a raspberry pi with apache, php, mysql, python and git installed on it.
+1. Pull the repo anywhere you want, ex your home dir
+2. create a synlink for the web project and python scripts
+```
+ln -s ~/utility-insights/htdocs /var/www/html/htdocs
+ln -s ~/utility-insights/
+```
+3. 
