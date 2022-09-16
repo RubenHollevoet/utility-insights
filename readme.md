@@ -37,3 +37,4 @@ ln -s /home/pi/utility-insights/scripts /home/pi/scripts
 @reboot sleep 5 && python3 /home/pi/scripts/read_electricity_meter.py > /home/pi/scripts/log/read_electricity_meter.log 2>&1
 @reboot sleep 5 && python3 /home/pi/scripts/read_green_energy_meter.py > /home/pi/scripts/log/read_green_energy_meter.log 2>&1
 ```
+- if you want, allow the application to self update by changing the repos directory user `sudo chown -R www-data:www-data utility-insights/` 
