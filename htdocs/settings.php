@@ -8,24 +8,19 @@
 
 <?php include "_partials/header.html"; ?>
 
-<?php
-if($_GET['update'] ?? null === 'true') {
-    exec('git -C /home/pi/utility-insights reset --hard', $versions, $retval);
 
-    var_dump($versions);
-    var_dump($retval);
-
-    exec('git -C /home/pi/utility-insights pull', $versions, $retval);
-
-    var_dump($versions);
-    var_dump($retval);
-
-}
-
-?>
 
 <div class="content">
     <div class="container mt-4">
+
+        <?php
+        if($_GET['update'] ?? null === 'true') {
+            exec('git -C /home/pi/utility-insights pull 2>&1', $output);
+
+            echo '<div class="alert alert-primary" role="alert">'.implode('<br>', $output).'</div>';
+        }
+        ?>
+
         <h1>Settings</h1>
 
         <div class="row my-4">
@@ -117,23 +112,7 @@ if($_GET['update'] ?? null === 'true') {
                     <div class="modal-body">
                         <span class="text-end text-muted d-block">current version: v<?php echo exec('git -C /home/pi/utility-insights describe --tags --abbrev=0'); ?></span>
                         <div class="mt-5 d-flex flex-column">
-                            <?php
-                            exec('git -C /home/pi/utility-insights pull', $versions, $retval);
-                            exec('git -C /home/pi/utility-insights tag -l', $versions, $retval);
-
-                            $lastTag = end($versions);
-                            $currentTag = exec('git -C /home/pi/utility-insights describe --tags --abbrev=0');
-
-                            var_dump($lastTag, $currentTag);
-
-                            if($lastTag !== $currentTag) {
-                                echo '<a href="?update=true" class="my-1 btn btn-outline-primary">install v'.$lastTag.'</a>';
-                            }
-                            else {
-                                echo '<button class="my-1 btn btn-outline-primary" disabled>update</button>';
-                                echo '<span class="my-1 d-block text-center text-muted">You already are on the latest version</span>';
-                            }
-                            ?>
+                            <a href="?update=true" class="my-1 btn btn-outline-primary">Install latest version</a>
                         </div>
                     </div>
                     <div class="modal-footer">
