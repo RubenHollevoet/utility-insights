@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import mysql.connector
 
-import database
+from database import utilityDb
 
 #GPIO setup
 BUTTON_PIN = 16

@@ -1,3 +1,5 @@
+import mysql.connector
+
 utilityDb = mysql.connector.connect(
         user="",
         password="",

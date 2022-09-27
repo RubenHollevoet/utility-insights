@@ -4,7 +4,7 @@ import random
 import time
 
 import p1_port
-import database
+from database import utilityDb
 
 #global vars
 data_push_interval = 10
